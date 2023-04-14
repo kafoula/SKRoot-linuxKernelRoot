@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #if defined(_WIN16) || defined(_WIN32) || defined(_WIN64)
+#define _CRT_SECURE_NO_WARNINGS
 #include "ArmAsmHelper_Windows.h"
 #elif defined(__linux__) || defined(__gnu_linux__)
 #include "ArmAsmHelper_Linux.h"

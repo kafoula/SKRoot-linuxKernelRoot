@@ -24,12 +24,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          cl patch_kernel_root\patch_kernel_root.cpp /EHsc /Fe:patch_kernel_root /Ipatch_kernel_root /I "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.35.32215\include"
-      - name: List files in current directory
-        run: |
-          ls patch_kernel_root
-          Get-ChildItem -Path . -Filter 'patch_kernel_root.*' -File -Recurse
-          Get-ChildItem -Path . -Filter '*.exe' -File -Recurse
+          cl patch_kernel_root\patch_kernel_root.cpp /MTd /EHsc /Fe:patch_kernel_root /Ipatch_kernel_root /I "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.35.32215\include"
       - name: Upload artifacts
         uses: Actions/upload-artifact@main
         with:
