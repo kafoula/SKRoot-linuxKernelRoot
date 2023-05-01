@@ -17,14 +17,37 @@ jobs:
         with:
           distribution: "adopt"
           java-version: 11
+      - name: Set keystore path
+        run: |
+          # Decode the base64-encoded keystore file and store it in the working directory
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > my-release-key.keystore
+          # Get the full path to the keystore file
+          WORKING_DIR=$(pwd)
+          KEYSTORE_FILE=my-release-key.keystore
+          KEYSTORE_PATH=$WORKING_DIR/$KEYSTORE_FILE
+          # Set the KEYSTORE_PATH as an environment variable
+          echo "KEYSTORE_PATH=$KEYSTORE_PATH" >> $GITHUB_ENV
+
       - name: Build with Gradle
         run: |
           cd PermissionManager
           chmod +x ./gradlew
           ./gradlew assembleRelease
+      - name: Sign APK
+        run: |
+          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 \
+                -keystore ${{ env.KEYSTORE_PATH }} \
+                -storepass ${{ secrets.KEYSTORE_PASSWORD }} \
+                -keypass ${{ secrets.KEY_PASSWORD }} \
+                PermissionManager/app/build/outputs/apk/release/app-release-unsigned.apk \
+                ${{ secrets.KEY_ALIAS }}
+      - name: Verify Signed APK
+        run: |
+          jarsigner -verify -verbose -certs \
+                PermissionManager/app/build/outputs/apk/release/app-release-unsigned.apk
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         if: ${{ !github.event.pull_request }}
         with:
           path: "PermissionManager/app/build/outputs/apk/release/app-release-unsigned.apk"
-          name: app-release-unsigned.apk
+          name: app-release-signed.apk
