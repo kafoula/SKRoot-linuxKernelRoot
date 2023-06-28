@@ -77,18 +77,18 @@ const char HEX[16] = {
 };
 
 /* Convert byte array to hex string. */
-std::string bytesToHexString(const std::byte* input, size_t length) {
+std::string bytesToHexString(const unsigned char* input, size_t length) {
 
-    std::string str;
-    str.reserve(length << 1);
-    for (size_t i = 0; i < length; ++i) {
-        int t = static_cast<int>(input[i]);
-        int a = t / 16;
-        int b = t % 16;
-        str.append(1, HEX[a]);
-        str.append(1, HEX[b]);
-    }
-    return str;
+	std::string str;
+	str.reserve(length << 1);
+	for (size_t i = 0; i < length; ++i) {
+		int t = input[i];
+		int a = t / 16;
+		int b = t % 16;
+		str.append(1, HEX[a]);
+		str.append(1, HEX[b]);
+	}
+	return str;
 }
 
 #endif /* ARM_ASM_HELPER_H_ */
