@@ -3,6 +3,9 @@ name: PermissionManager_CIBuild
 on:
   push:
     branches: [master]
+    paths:
+      - '.github/workflows/PermissionManager.yml'
+      - 'PermissionManager/**'
   pull_request:
     branches: [master]
   workflow_dispatch:
