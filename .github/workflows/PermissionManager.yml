@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/PermissionManager.yml'
       - 'PermissionManager/**'
+      - 'testRoot/**'
   pull_request:
     branches: [master]
   workflow_dispatch:
